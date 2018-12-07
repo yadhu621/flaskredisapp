@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:3.2-alpine
+    ports:
+      - 6379:6379
+    volumes: 
+      - redis_vol:/data
+    networks:
+      - net1
+    
+  web:
+    depends_on: 
+      - redis
+    build: .
+    image: yadhu621/flaskredisapp
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    environment: 
+      - COMPOSE_PROJECT_NAME=frapp
+    networks:
+      - net1
+
+volumes:
+  redis_vol:
+
+networks:
+  net1:
